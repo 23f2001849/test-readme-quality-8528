@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 500px;
+        }
+        .task {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-3">Task Manager</h1>
+        <form id="task-form">
+            <div class="input-group">
+                <input type="text" id="task-input" class="form-control" required>
+                <button type="submit" class="btn btn-primary">Add Task</button>
+            </div>
+        </form>
+        <div id="tasks"></div>
+    </div>
+    
+    <script>
+        // Initialize tasks array
+        let tasks = [];
+
+        // Get form and tasks container
+        const form = document.getElementById('task-form');
+        const tasksContainer = document.getElementById('tasks');
+
+        // Function to render tasks
+        const renderTasks = () => {
+            tasksContainer.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task bg-light p-2 rounded d-flex justify-content-between align-items-center';
+                taskDiv.innerHTML = `
+                    ${task}
+                    <button class="btn btn-danger btn-sm" onClick="deleteTask(${index})">Delete</button>
+                `;
+                tasksContainer.appendChild(taskDiv);
+            });
+        };
+
+        // Function to delete a task
+        const deleteTask = (index) => {
+            tasks.splice(index, 1);
+            renderTasks();
+        };
+
+        // Make deleteTask function available in the global scope
+        window.deleteTask = deleteTask;
+
+        // Form submit event
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            const taskInput = document.getElementById('task-input');
+            tasks.push(taskInput.value);
+            taskInput.value = '';
+            renderTasks();
+        };
+    </script>
+</body>
+</html>
